@@ -10,5 +10,5 @@ x-vectors were generated using the default VOCALISE x-vector model using MFCCs (
 ## Scores and distributions
 
 Within-speaker comparisons were carried out in VOCALISE using the default x-vector PDLA comparison with minimum duration set to 10 seconds. For each participant, each sample was compared to every other sample. The score matrix generated from these comparisons are:
-- (2022-11-22_1129_P0001-HDM-m2m_2021-XVector-Adaptable-20F-512-OCMS-02Nov2021_XVector - PLDA.csv)[] for P0001
-- (2022-12-13-1309-P0004-HDM-m2m_2021-XVector-Adaptable-20F-512-OCMS-02Nov2021_XVector - PLDA.csv)[] for P0004 
+- (2022-11-22_1129_P0001-HDM-m2m_2021-XVector-Adaptable-20F-512-OCMS-02Nov2021_XVector - PLDA.csv)[https://github.com/uoy-research/pasr-output/blob/main/ICPhS_23_Sensitivity/scores/2022-11-22_1129_P0001-HDM-m2m_2021-XVector-Adaptable-20F-512-OCMS-02Nov2021_XVector%20-%20PLDA.csv] for P0001
+- (2022-12-13-1309-P0004-HDM-m2m_2021-XVector-Adaptable-20F-512-OCMS-02Nov2021_XVector - PLDA.csv)[https://github.com/uoy-research/pasr-output/blob/main/ICPhS_23_Sensitivity/scores/2022-12-13-1309-P0004-HDM-m2m_2021-XVector-Adaptable-20F-512-OCMS-02Nov2021_XVector%20-%20PLDA.csv] for P0004 
