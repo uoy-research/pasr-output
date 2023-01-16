@@ -7,6 +7,7 @@ This markdown file details the workflow for the ICPhS submission *Sensitivity of
 x-vectors were generated using the default VOCALISE x-vector model using MFCCs (2021-XVector-Adaptable-20F-512-OCMS-02Nov2021) for P0001 (PF - 2022-11-22) and P0004 (FN - 2022-12-13). The x-vectors generated are available in [the x-vector folder](https://github.com/uoy-research/pasr-output/tree/main/ICPhS_23_Sensitivity/x-vectors) in this repo 
 
 ### tSNE plots
+(speak to Poppy)
 
 ## Scores and distributions
 ### Scores
