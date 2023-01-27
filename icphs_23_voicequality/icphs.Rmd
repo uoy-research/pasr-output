@@ -1,0 +1,266 @@
+---
+title: "Contributions of Acoustic Measures to the Classification of Laryngeal Voice Quality in Continuous English Speech"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+    number_sections: yes
+date: '2022-12-15, updated on `r Sys.Date()`'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is an R Markdown document for Work Package I Data Exploration and Processing.
+
+# R Packages
+
+```{r packages, echo=TRUE, warning = FALSE, message=FALSE}
+library(tidyverse)
+library(ggdist)
+```
+
+# Data: Outputs from VoiceSauce
+
+```{r data}
+p1 <-read_tsv("data/p1.txt", col_names =TRUE)
+p2 <-read_tsv("data/p2.txt", col_names =TRUE)
+p3 <-read_tsv("data/p3.txt", col_names =TRUE)
+p4 <-read_tsv("data/p4.txt", col_names =TRUE)
+
+p <-bind_rows("P0001" = p1, "P0002" = p2, 
+              "P0003" = p3, "P0004" = p4, .id ="participant")
+```
+
+## Long-term Fundamental frequency F0
+
+```{r pressure, echo=FALSE}
+f0_wide <- p %>% select(c(participant, strF0, sF0, pF0))
+f0 <- f0_wide %>% pivot_longer(cols=c(strF0, sF0, pF0), 
+                    names_to='algo', values_to="f0")
+
+f0 %>% filter(f0>0) %>%
+  ggplot(aes(x= algo, y=f0)) +
+  facet_wrap(~participant)+
+  stat_halfeye(
+    justification = -.2,
+    .width = 0,
+#    .width = c(.5, .95)
+  ) + 
+  geom_boxplot(
+    width=.2,
+    outlier.shape = NA
+  ) +
+  coord_flip(ylim = c(0,500))
+```
+F0 values tracked by Snack (`sF0`) will be used as base.
+
+## Voice Quality Encoding
+
+```{r }
+pvq <- p %>% 
+  mutate(phonation = case_when(
+    str_detect(p$Filename, "MOD") ~ "MOD",
+    str_detect(p$Filename, "CRK") ~ "CRK",
+    str_detect(p$Filename, "BRT") ~ "BRT"
+  )) %>% 
+  select (- c("...61")) %>% 
+  filter(!is.na(phonation))
+```
+
+## Harmonics-to-noise ratios (HNR)
+
+```{r}
+hnr <- pvq %>% select(c(participant, Filename,sF0, phonation, 
+                        HNR05, HNR15, HNR25, HNR35)) %>%
+  pivot_longer(cols=c(HNR05, HNR15, HNR25, HNR35), 
+               names_to='frange', values_to="HNR") %>% 
+  filter(sF0>0)
+
+hnr %>% filter(HNR>0) %>%
+  ggplot(aes(x= frange, y=HNR)) + 
+  facet_wrap(~ phonation) +
+  stat_halfeye()
+
+hnr %>% filter(HNR>0) %>%
+  ggplot(aes(HNR, fill =participant, color=participant)) + 
+  facet_grid(vars(phonation), vars(frange)) +
+  geom_density(alpha = 0.3)
+```
+
+## Long-term Harmonic magnitudes
+
+
+```{r}
+# H1-A1; H1-A2; H1-A3
+spec <- pvq %>% select(c(participant, Filename, phonation, sF0, 
+                        H1H2c, H2H4c, H1A1c, H1A2c, H1A3c)) %>%
+  pivot_longer(cols = c(H1H2c, H2H4c, H1A1c, H1A2c, H1A3c), 
+               names_to = 'spectra', values_to = 'magnitudes') %>% 
+  filter(sF0>0)
+
+spec %>% filter(magnitudes>0) %>%
+  ggplot(aes(x= phonation, y=magnitudes)) + 
+  facet_wrap(~ spectra) +
+  stat_halfeye()
+
+# H1-H2; H2-H4
+spec <- pvq %>% select(c(participant, Filename, phonation, sF0,
+                        H1H2c, H2H4c)) %>%
+  pivot_longer(cols = c(H1H2c, H2H4c), 
+               names_to = 'spectra', values_to = 'magnitudes') %>% 
+  filter(sF0>0)
+
+spec %>% filter(magnitudes>0) %>%
+  ggplot(aes(x= phonation, y=magnitudes)) + 
+  facet_wrap(~ spectra) +
+  stat_halfeye()
+
+spec %>% filter(magnitudes>0) %>%
+  ggplot(aes(magnitudes, fill =participant, color=participant)) + 
+  facet_grid(vars(phonation), vars(spectra)) +
+  geom_density(alpha = 0.3)
+```
+
+## F0 and H1H2
+
+```{r}
+h1h2 <- pvq %>% select(c(participant, Filename, phonation, sF0,
+                        H1H2c, H1H2u)) %>% 
+  filter(sF0>0)
+
+h1h2 %>% filter(H1H2c>0) %>% 
+  ggplot(aes(x=sF0, y=H1H2c, color=phonation)) +
+  facet_wrap(~ participant) +
+  geom_point(alpha=0.2)
+
+```
+
+## Formants
+
+```{r}
+fx <- pvq %>% select(c(participant, Filename, t_ms, phonation, 
+                        sF0, sF1, sF2, sF3, sF4)) %>%
+  pivot_longer(cols = c(sF1, sF2, sF3, sF4), 
+               names_to = 'formants', values_to = 'frequency')
+
+fx %>% filter(frequency>0) %>%
+  ggplot(aes(x= formants, y=frequency)) + 
+  facet_grid(vars(phonation), vars(participant)) +
+  stat_halfeye()
+```
+
+# Data Processing
+## Voicing Portion Measurement
+
+```{r}
+
+# soe is probably meaningless when the frame shift is 10ms, which is much longer than the length of a glottal cycle? 
+pvq[pvq ==0] <- NA
+
+View(pvq)
+#colMeans(pvq[sapply(pvq, is.numeric)], na.rm = TRUE)
+
+# pvq %>% filter(sF0>0) %>% 
+#   group_by(participant, Filename, phonation) %>%
+#   summarise(across(where(is.numeric), 
+#                    list(~mean(.,na.rm=TRUE), 
+#                         ~sd(.,na.rm = TRUE))
+#                    ))%>%
+#                      View()
+ 
+data <- pvq %>% 
+  filter(sF0>0) %>% 
+  group_by(participant, Filename, phonation) %>%
+  summarise_if(.predicate = function(x) is.numeric(x), 
+               .funs= list(~mean(.,na.rm=TRUE), 
+                           ~sd(.,na.rm = TRUE)))
+
+#write_csv(data, "wp1_data.csv")
+
+datas <-pvq %>%
+  select(-c("strF0", "pF0","epoch","t_ms","soe",
+            "pF1","pF2","pF3","pF4",
+            "pB1","pB2","pB3","pB4",
+            "H1u","H2u", "H4u","H2Ku","H5Ku",
+            "A1u","A2u", "A3u",
+            "H1H2u","H2H4u","H1A1u", "H1A2u", "H1A3u",
+            "H42Ku","H2KH5Ku",
+            "SHR", "shrF0")) %>%
+  filter(sF0>0) %>%
+  filter(sF0<230) %>% #see P0003_S03_R02_MOD_HDM.wav for highest f0 "people look"
+  group_by(participant, Filename, phonation) %>%
+  summarise_if(.predicate = function(x) is.numeric(x), 
+               .funs= list(~mean(.,na.rm=TRUE), 
+                           ~sd(.,na.rm = TRUE)))
+
+datas$session <- str_extract(datas$Filename,"(?<=_)(S\\d+)(?=_)") 
+datas$repetition <- str_extract(datas$Filename,"(?<=_)(R\\d+)(?=_)")
+datas$comb_no <- paste0(datas$session, datas$repetition)
+
+#write_csv(datas, "wp1_datas_nosoe.csv")
+
+```
+
+## Augment the dataset
+```{r}
+
+dur <-pvq %>% select(Filename, t_ms) %>% 
+  group_by(Filename) %>%
+  filter(row_number()==n()) %>%
+  rename(dur = t_ms)
+  
+data <- merge(pvq, dur, by ="Filename")
+  
+datas <-data %>% 
+  filter(sF0 > 0 & sF0 < 230) %>%
+  mutate(interval = case_when(
+    t_ms <= dur/6 ~ "a",
+    t_ms > dur/6 & t_ms <= dur/3 ~ "b",
+    t_ms > dur/3 & t_ms <= dur/2 ~ "c",
+    t_ms > dur/2 & t_ms <= 2*dur/3 ~ "d",
+    t_ms > 2*dur/3 & t_ms <= 5*dur/6 ~ "e",
+    t_ms > 5*dur/6 ~ "f"
+  )) %>% 
+  select(-c("strF0", "pF0","epoch", "t_ms", "dur","soe",
+            "pF1","pF2","pF3","pF4",
+            "pB1","pB2","pB3","pB4",
+            "H1u","H2u", "H4u","H2Ku","H5Ku",
+            "A1u","A2u", "A3u",
+            "H1H2u","H2H4u","H1A1u", "H1A2u", "H1A3u",
+            "H42Ku","H2KH5Ku",
+            "SHR", "shrF0")) %>%
+  group_by(participant, Filename, phonation, interval) %>%
+  summarise_if(.predicate = function(x) is.numeric(x), 
+               .funs= list(~mean(.,na.rm=TRUE), 
+                           ~sd(.,na.rm = TRUE)))
+  
+datas$session <- str_extract(datas$Filename,"(?<=_)(S\\d+)(?=_)") 
+datas$repetition <- str_extract(datas$Filename,"(?<=_)(R\\d+)(?=_)")
+datas$comb_no <- paste0(datas$session, datas$repetition, datas$interval)
+datas$rs <- paste0(datas$session, datas$repetition)
+
+#write_csv(datas, "vsdatasint_nosoe.csv")
+```
+
+```{r}
+
+## information about duration of voicing portion in each interval
+x <- data %>% 
+     filter(sF0 > 0 & sF0 < 230) %>%
+    mutate(interval = case_when(
+         t_ms <= dur/6 ~ "a",
+         t_ms > dur/6 & t_ms <= dur/3 ~ "b",
+         t_ms > dur/3 & t_ms <= dur/2 ~ "c",
+         t_ms > dur/2 & t_ms <= 2*dur/3 ~ "d",
+         t_ms > 2*dur/3 & t_ms <= 5*dur/6 ~ "e",
+         t_ms > 5*dur/6 ~ "f"
+     )) %>% group_by(Filename, interval) %>% summarise(nrow=n())
+
+mean(x$nrow)
+sd(x$nrow)
+```
