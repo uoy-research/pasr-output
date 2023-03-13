@@ -16,8 +16,7 @@ This markdown file details the workflow for the Interspeech submission *Automati
 | VC Group | Vocal Conditions |
 | --- | --- |
 | Baseline | MOD - Modal voice |
-| Accent Guises | RPR - Received Pronunciation
- ACC - Non-standard guises (*Geordie, Manchester, NYC, Yorkshire*)|
+| Accent Guises | RPR - Received Pronunciation \ ACC - Non-standard guises (*Geordie, Manchester, NYC, Yorkshire*)|
 | Laryngeal | BRT - Breathy; CRK - Creaky; WHS - Whisper |
 | Supralaryngeal | FTB - Fronted Tongue Body; BTB - Backed Tongue Body; RET - Retroflex; LLX - Lowered Larynx |
 | Miscellaneous | HIG - High pitch; LOW - Low pitch; FAS - Fast; LIV - Lively; MON - Monotone; PEN - Pen between the teeth; PIN - Pinched nose |
