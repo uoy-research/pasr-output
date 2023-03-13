@@ -36,7 +36,7 @@ Only included R01-R03. This analysis excluded the additional repetitions within 
 Used 20 speakers from DyViS who took part in Task 3 and Task 5
 
 ## Comps and scores
-Include x-vectors (?)
+- Include x-vectors (?)
 
 Vocalise outputs (available in the [*VocaliseOutput*](https://drive.google.com/drive/folders/1dHXavYfNbPlqgIaOfZmdUScgfXkrWs41) folder on GoogleDrive):
 - 2023-02-21-0945_P1-2-3-4-6-9-HDM-m2m_2021-XVector-Adaptable-20F-512-OCMS-02Nov2021_XVector - PLDA.csv
@@ -55,4 +55,4 @@ Include link to version of Matlab code used to evaluate performance
 ## Results
 [Figure 1 from article](https://github.com/uoy-research/pasr-output/blob/main/Interspeech_23_Calibration/(1)%20Match%20Mismatch%20Performance.pdf) - link to version of R code used to generate final plot
 
-Include code or plots which weren't included in final article (?)
+- Include code or plots which weren't included in final article (?)
