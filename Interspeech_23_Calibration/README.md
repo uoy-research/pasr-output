@@ -5,6 +5,7 @@ This markdown file details the workflow for the Interspeech submission *Automati
 ## Test Data
 
 | Participant Number | Participant initials |
+| --- | --- |
 | P0001 | PF |
 | P0002 | JT |
 | P0003 | BGR |
@@ -13,6 +14,7 @@ This markdown file details the workflow for the Interspeech submission *Automati
 | P0009 | DW |
 
 | VC Group | Vocal Conditions |
+| --- | --- |
 | Baseline | MOD - Modal voice |
 | Accent Guises | RPR - Received Pronunciation; ACC - Non-standard guises (*Geordie, Manchester, NYC, Yorkshire*)|
 | Laryngeal | BRT - Breathy; CRK - Creaky; WHS - Whisper |
