@@ -6,4 +6,4 @@ ICPhS 2023
 - [*Contributions of Acoustic Measures to the Classification of Laryngeal Voice Quality in Continuous English Speech*](https://github.com/uoy-research/pasr-output/tree/main/icphs_23_voicequality)
 
 Interspeech 2023
-- [*Automatic speaker recognition with variation across vocal conditions*]()
+- [*Automatic speaker recognition with variation across vocal conditions*](https://github.com/uoy-research/pasr-output/tree/main/Interspeech_23_Calibration)
