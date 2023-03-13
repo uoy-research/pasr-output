@@ -53,5 +53,6 @@ Include link to version of Matlab code used to do Score-to-LR conversion
 Include link to version of Matlab code used to evaluate performance
 
 ## Results
-Include plot from article on git and include link here. Also link to version of R code used to generate final plot
+[Figure 1 from article](https://github.com/uoy-research/pasr-output/blob/main/Interspeech_23_Calibration/(1)%20Match%20Mismatch%20Performance.pdf) - link to version of R code used to generate final plot
+
 Include code or plots which weren't included in final article (?)
