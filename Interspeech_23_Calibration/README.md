@@ -49,10 +49,8 @@ Converted dataframes used in analysis (available in the [*2023-02 - Many-many...
 Formatting and converting dataframes done in R. The code is documented in the score_dist_visualisations.R script (version [5b10255e5f698056e6925f0b65d8184f11ca00fc](https://github.com/uoy-research/pasr-analysis/blob/5b10255e5f698056e6925f0b65d8184f11ca00fc/score_dist_visualisations.R) - 2023-03-06) in the pasr-analysis repo. 
 
 ## Analysis 
-Include link to version of Matlab code used to do Score-to-LR conversion
-Include link to version of Matlab code used to evaluate performance
+- [*get_BF_Jeffreys.m*](https://github.com/uoy-research/pasr-analysis/blob/main/Calibration/shrunk%20LRs%20-%202017-08-03a/functions/get_BF_Jeffreys.m) used as the basis for code used for calibration. 
+- [*WP1_calibration_run.m*](https://github.com/uoy-research/pasr-analysis/blob/main/Calibration/WP1_calibration_run.m) used by VH to run final calibration for analysis. This also includes the code to evaluate performance
 
 ## Results
-[Figure 1 from article](https://github.com/uoy-research/pasr-output/blob/main/Interspeech_23_Calibration/(1)%20Match%20Mismatch%20Performance.pdf) - link to version of R code used to generate final plot
-
-- Include code or plots which weren't included in final article (?)
+[Figure 1 from article](https://github.com/uoy-research/pasr-output/blob/main/Interspeech_23_Calibration/(1)%20Match%20Mismatch%20Performance.pdf) generated with [*WP1_plot_calibration_DyViS.R*](https://github.com/uoy-research/pasr-analysis/blob/main/Calibration/WP1_plot_calibration_DyViS.R)
